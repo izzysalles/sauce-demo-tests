@@ -21,27 +21,27 @@ describe('Sauce Demo Login', () => {
     cy.visit('/');
   });
 
-  it('Login com sucesso: e-mail e senha válidos', () => {
+  it('Successful login: valid username and password', () => {
     cy.login(VALID_USERNAME, VALID_PASSWORD);
     assertLoginSuccess();
   });
 
-  it('Login com sucesso: usuário e senha válidos', () => {
+  it('Successful login: correct user and password', () => {
     cy.login(VALID_USERNAME, VALID_PASSWORD);
     assertLoginSuccess();
   });
 
-  it('Login com sucesso: redirecionamento correto após login', () => {
+  it('Successful login: correct redirect after login', () => {
     cy.login(VALID_USERNAME, VALID_PASSWORD);
     cy.url().should('include', '/inventory.html');
   });
 
-  it('Login com sucesso: sessão iniciada corretamente após autenticação', () => {
+  it('Successful login: session started correctly after authentication', () => {
     cy.login(VALID_USERNAME, VALID_PASSWORD);
     assertLoginSuccess();
   });
 
-  it('Login com sucesso: usuário permanece logado ao atualizar a página', () => {
+  it('Successful login: user stays logged in after page refresh', () => {
     cy.login(VALID_USERNAME, VALID_PASSWORD);
     assertLoginSuccess();
     cy.reload();
@@ -49,57 +49,57 @@ describe('Sauce Demo Login', () => {
     cy.get('.title').should('contain.text', 'Products');
   });
 
-  it('Login com dados inválidos: e-mail inválido', () => {
+  it('Invalid login: invalid username', () => {
     cy.login('invalid-email', VALID_PASSWORD);
     assertLoginError(ERROR_INVALID_CREDENTIALS);
   });
 
-  it('Login com dados inválidos: senha incorreta', () => {
+  it('Invalid login: incorrect password', () => {
     cy.login(VALID_USERNAME, 'wrong_password');
     assertLoginError(ERROR_INVALID_CREDENTIALS);
   });
 
-  it('Login com dados inválidos: usuário inexistente', () => {
+  it('Invalid login: nonexistent user', () => {
     cy.login('nonexistent_user', VALID_PASSWORD);
     assertLoginError(ERROR_INVALID_CREDENTIALS);
   });
 
-  it('Login com dados inválidos: senha vazia', () => {
+  it('Invalid login: empty password', () => {
     cy.login(VALID_USERNAME, '');
     assertLoginError(ERROR_PASSWORD_REQUIRED);
   });
 
-  it('Login com dados inválidos: e-mail/usuário vazio', () => {
+  it('Invalid login: empty username', () => {
     cy.login('', VALID_PASSWORD);
     assertLoginError(ERROR_USERNAME_REQUIRED);
   });
 
-  it('Login com dados inválidos: todos os campos vazios', () => {
+  it('Invalid login: all fields empty', () => {
     cy.login('', '');
     assertLoginError(ERROR_USERNAME_REQUIRED);
   });
 
-  it('Validação de campos: formato de e-mail inválido', () => {
+  it('Field validation: invalid username format', () => {
     cy.login('invalid-email-format', VALID_PASSWORD);
     assertLoginError(ERROR_INVALID_CREDENTIALS);
   });
 
-  it('Validação de campos: limite mínimo de caracteres da senha', () => {
+  it('Field validation: minimum password length', () => {
     cy.login(VALID_USERNAME, '123');
     assertLoginError(ERROR_INVALID_CREDENTIALS);
   });
 
-  it('Validação de campos: limite máximo de caracteres', () => {
+  it('Field validation: maximum password length', () => {
     cy.login(VALID_USERNAME, 'a'.repeat(100));
     assertLoginError(ERROR_INVALID_CREDENTIALS);
   });
 
-  it('Validação de campos: espaços antes/depois do e-mail', () => {
+  it('Field validation: leading/trailing spaces in username', () => {
     cy.login(` ${VALID_USERNAME} `, VALID_PASSWORD);
     assertLoginError(ERROR_INVALID_CREDENTIALS);
   });
 
-  it('Validação de campos: caracteres especiais na senha', () => {
+  it('Field validation: special characters in password', () => {
     cy.login(VALID_USERNAME, '@$%&*()!');
     assertLoginError(ERROR_INVALID_CREDENTIALS);
   });
